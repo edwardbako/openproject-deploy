@@ -4,16 +4,21 @@ networks:
   frontend:
   backend:
 
+
 volumes:
   pgdata:
   opdata:
 
-x-op-restart-policy: &restart_policy
+
+x-op-restart-policy:
+  &restart_policy
   restart: unless-stopped
-x-op-image: &image
-  image: openproject/community:${TAG:-12}
-x-op-app: &app
-  <<: [*image, *restart_policy]
+x-op-image:
+  &image
+  image: edwardbako/openproject
+x-op-app:
+  &app
+  <<: [ *image, *restart_policy ]
   environment:
     OPENPROJECT_HTTPS: "${OPENPROJECT_HTTPS:-true}"
     OPENPROJECT_HOST__NAME: "${OPENPROJECT_HOST__NAME:-localhost:8080}"
@@ -49,7 +54,7 @@ services:
       - backend
 
   proxy:
-    <<: [*image, *restart_policy]
+    <<: [ *image, *restart_policy ]
     command: "./docker/prod/proxy"
     ports:
       - "${PORT:-8080}:80"
@@ -74,7 +79,13 @@ services:
     labels:
       - autoheal=true
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080${OPENPROJECT_RAILS__RELATIVE__URL__ROOT:-}/health_checks/default"]
+      test:
+        [
+          "CMD",
+          "curl",
+          "-f",
+          "http://localhost:8080${OPENPROJECT_RAILS__RELATIVE__URL__ROOT:-}/health_checks/default"
+        ]
       interval: 10s
       timeout: 3s
       retries: 3
@@ -113,4 +124,3 @@ services:
     restart: on-failure
     networks:
       - backend
-

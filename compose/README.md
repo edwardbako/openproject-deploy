@@ -4,19 +4,19 @@
 
 Clone this repository:
 
-    git clone https://github.com/opf/openproject-deploy --depth=1 --branch=stable/12 openproject
+    git clone https://github.com/edwardbako/openproject-deploy --depth=1 --branch=stable/12 openproject-deploy
 
 Go to the compose folder: 
 
-    cd openproject/compose
+    cd openproject-deploy/compose
 
 Make sure you are using the latest version of the Docker images:
 
-    docker-compose pull
+    docker compose pull
 
 Launch the containers:
 
-    docker-compose up -d
+    OPENPROJECT_HTTPS=false docker compose up -d
 
 After a while, OpenProject should be up and running on <http://localhost:8080>.
 
